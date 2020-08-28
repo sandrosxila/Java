@@ -44,7 +44,7 @@ public class LinkedList<T> implements Iterable<T> {
     }
 
     int size(){
-        return size();
+        return size;
     }
 
     void popHead(){
