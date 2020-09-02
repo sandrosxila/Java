@@ -36,15 +36,22 @@ public class Main {
         System.out.println();
         linkedList.sort();
 
+        linkedList.add(41);
+        linkedList.add(42);
+        linkedList.add(44);
+        linkedList.add(43);
         for (Integer x : linkedList){
             System.out.print(x + " ");
-        }
-        System.out.println();
+        }System.out.println();
+        linkedList.sort();
         linkedList.add(41);
         linkedList.add(42);
         linkedList.add(44);
         linkedList.add(43);
         linkedList.sort();
+        linkedList.erase(20);
+        linkedList.erase(12);
+        System.out.println(linkedList.size());
         for (Integer x : linkedList){
             System.out.print(x + " ");
         }

@@ -1,8 +1,6 @@
 package com.linkedlist;
 
 import java.util.Iterator;
-import java.util.Queue;
-import java.util.Stack;
 
 public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 
@@ -31,23 +29,16 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
         return tail.getItem();
     }
 
+    private boolean checkIndex(int index){
+        return index < this.size();
+    }
+
     public void add(T item) {
         if (this.size() == 0) {
             tail = new ListItem<T>(item);
             head.setNext(tail);
         } else {
             tail.setNext(new ListItem<T>(item));
-            tail = tail.getNext();
-        }
-        size++;
-    }
-
-    public void add(ListItem<T> newListItem) {
-        if (this.size() == 0) {
-            head = newListItem;
-            tail = head;
-        } else {
-            tail.setNext(newListItem);
             tail = tail.getNext();
         }
         size++;
@@ -62,7 +53,13 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
     }
 
     T get(int index) {
-
+        if(checkIndex(index) == false){
+            try {
+                throw new Exception("index out of range!!!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         ListItem<T> current = head.getNext();
         int currentIndex = 0;
 
@@ -72,6 +69,26 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
         }
 
         return current.getItem();
+    }
+
+    public void erase(int index){
+        if(checkIndex(index) == false){
+            try {
+                throw new Exception("index out of range!!!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        ListItem<T> current = head;
+        int currentIndex = 0;
+
+        while (currentIndex < index) {
+            current = current.getNext();
+            currentIndex++;
+        }
+        this.size = Math.max(this.size - 1, 0);
+        current.setNext(current.getNext().getNext());
+
     }
 
     int size() {
@@ -146,5 +163,4 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
             segmentSize <<= 1;
         }
     }
-
 }
