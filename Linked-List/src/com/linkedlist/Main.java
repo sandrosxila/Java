@@ -39,5 +39,14 @@ public class Main {
         for (Integer x : linkedList){
             System.out.print(x + " ");
         }
+        System.out.println();
+        linkedList.add(41);
+        linkedList.add(42);
+        linkedList.add(44);
+        linkedList.add(43);
+        linkedList.sort();
+        for (Integer x : linkedList){
+            System.out.print(x + " ");
+        }
     }
 }

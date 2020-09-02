@@ -138,7 +138,9 @@ public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
                 }
                 for(int i = 0; i < 2 * segmentSize; i++){
                     if(current == null) break;
+                    this.tail = current;
                     current = current.getNext();
+
                 }
             }
             segmentSize <<= 1;
