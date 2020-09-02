@@ -5,7 +5,7 @@ import com.linkedlist.ListItem;
 
 import java.util.Iterator;
 
-public class LinkedListIterator<T> implements Iterator<T> {
+public class LinkedListIterator<T extends Comparable<T>> implements Iterator<T> {
 
     ListItem<T> current;
 

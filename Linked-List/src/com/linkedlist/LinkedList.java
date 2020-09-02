@@ -1,41 +1,72 @@
 package com.linkedlist;
 
 import java.util.Iterator;
+import java.util.Queue;
+import java.util.Stack;
 
-public class LinkedList<T> implements Iterable<T> {
+public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
 
     private ListItem<T> head;
     private ListItem<T> tail;
     private int size;
 
-    LinkedList(){
-        this.tail = new ListItem<>();
-        this.head = tail;
+    LinkedList() {
+        this.head = new ListItem<>();
         this.size = 0;
     }
 
     public ListItem<T> getHead() {
-        return head;
+        return head.getNext();
     }
 
-    public ListItem<T> getTail(){
+    public ListItem<T> getTail() {
         return tail;
     }
 
-    void add(T item) {
-        ListItem<T> newListItem = new ListItem<>();
-        newListItem.setItem(item);
-        tail.setNext(newListItem);
-        tail = tail.getNext();
+    public T head() {
+        return head.getNext().getItem();
+    }
+
+    public T tail() {
+        return tail.getItem();
+    }
+
+    public void add(T item) {
+        if (this.size() == 0) {
+            tail = new ListItem<T>(item);
+            head.setNext(tail);
+        } else {
+            tail.setNext(new ListItem<T>(item));
+            tail = tail.getNext();
+        }
         size++;
     }
 
-    T get(int index){
+    public void add(ListItem<T> newListItem) {
+        if (this.size() == 0) {
+            head = newListItem;
+            tail = head;
+        } else {
+            tail.setNext(newListItem);
+            tail = tail.getNext();
+        }
+        size++;
+    }
 
-        ListItem<T> current = head;
+    public void addFront(T item) {
+        ListItem<T> newListItem = new ListItem<>();
+        newListItem.setItem(item);
+        newListItem.setNext(head.getNext());
+        head.setNext(newListItem);
+        size++;
+    }
+
+    T get(int index) {
+
+        ListItem<T> current = head.getNext();
         int currentIndex = 0;
 
-        while(currentIndex <= index){
+        while (currentIndex < index) {
             current = current.getNext();
             currentIndex++;
         }
@@ -43,15 +74,13 @@ public class LinkedList<T> implements Iterable<T> {
         return current.getItem();
     }
 
-    int size(){
+    int size() {
         return size;
     }
 
-    void popHead(){
-        if(size != 0){
-            ListItem <T> next = head.getNext();
-            head = null;
-            head = next;
+    void popHead() {
+        if (size != 0) {
+            head.setNext(head.getNext().getNext());
         }
         size = Math.max(0, size - 1);
     }
@@ -60,4 +89,60 @@ public class LinkedList<T> implements Iterable<T> {
     public Iterator<T> iterator() {
         return new LinkedListIterator<T>(this);
     }
+
+    public void sort() {
+        int segmentSize = 1;
+        while (segmentSize <= this.size()) {
+            ListItem<T> current = this.head;
+            LinkedList<T> left = new LinkedList<>();
+            LinkedList<T> right = new LinkedList<>();
+            while (current != null) {
+                for(int i = 0; i < segmentSize; i++){
+                    if(current.getNext()==null) break;
+                    left.addFront(current.getNext().getItem());
+                    current.setNext(current.getNext().getNext());
+                }
+                for(int i = 0; i < segmentSize; i++){
+                    if(current.getNext()==null) break;
+                    right.addFront(current.getNext().getItem());
+                    current.setNext(current.getNext().getNext());
+                }
+                while(right.size()!=0 || left.size()!=0){
+                    ListItem<T> newItem = new ListItem<>();
+                    if(right.size()!=0 && left.size!=0){
+                        if(left.head().compareTo(right.head()) > 0){
+                            newItem.setItem(left.head());
+                            newItem.setNext(current.getNext());
+                            left.popHead();
+                            current.setNext(newItem);
+                        }
+                        else{
+                            newItem.setItem(right.head());
+                            newItem.setNext(current.getNext());
+                            right.popHead();
+                            current.setNext(newItem);
+                        }
+                    }
+                    else if(right.size() == 0){
+                        newItem.setItem(left.head());
+                        newItem.setNext(current.getNext());
+                        left.popHead();
+                        current.setNext(newItem);
+                    }
+                    else {
+                        newItem.setItem(right.head());
+                        newItem.setNext(current.getNext());
+                        right.popHead();
+                        current.setNext(newItem);
+                    }
+                }
+                for(int i = 0; i < 2 * segmentSize; i++){
+                    if(current == null) break;
+                    current = current.getNext();
+                }
+            }
+            segmentSize <<= 1;
+        }
+    }
+
 }
