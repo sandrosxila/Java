@@ -29,16 +29,16 @@ class Countdown {
             default:
                 color = ANSI_RESET;
         }
-
-        for (i = 10; i > 0; i-- ){
-            System.out.println(color + Thread.currentThread().getName() + " : i = " + i);
+        synchronized (this) {
+            for (i = 10; i > 0; i--) {
+                System.out.println(color + Thread.currentThread().getName() + " : i = " + i);
+            }
         }
-
     }
 }
 
 class CountdownThread extends Thread{
-    private  Countdown threadCountdown;
+    private Countdown threadCountdown;
 
     public CountdownThread(Countdown countdown){
         this.threadCountdown = countdown;
